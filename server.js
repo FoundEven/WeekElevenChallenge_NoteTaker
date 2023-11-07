@@ -15,16 +15,23 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
+app.get('/notes', (req, res) =>
+  res.sendFile(path.join(__dirname, '/public/notes.html'))
+);
+
+
 app.get('/api/notes', (req, res) => {
+  // Log our request to the terminal
+  console.info(`${req.method} request received to get notes`);
 
-  console.info(`${req.method} request received to get reviews`);
-
+  // Sending all reviews to the client
   return res.json(reviewJson);
 });
 
+
 app.post('/api/notes', (req, res) => {
   // Log that a POST request was received
-  console.info(`${req.method} request received to add a review`);
+  console.info(`${req.method} request received to add a note`);
 
   // Destructuring assignment for the items in req.body
   const { title, text } = req.body;
@@ -45,15 +52,11 @@ app.post('/api/notes', (req, res) => {
       err
         ? console.error(err)
         : console.log(
-            `Review for ${newReview.product} has been written to JSON file`
+            `Review for ${newReview} has been written to JSON file`
           )
     );
   };
 });
-
-app.get('/notes', (req, res) =>
-  res.sendFile(path.join(__dirname, '/public/notes.html'))
-);
 
 
 app.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}`));
