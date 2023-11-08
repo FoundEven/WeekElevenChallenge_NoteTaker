@@ -2,19 +2,21 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
-
+//connection to json file
 let reviewJson = require('./db/db.json');
 
 
-const PORT = process.env.PORT || 3001;
-
+const PORT = process.env.PORT || 3001;  
 const app = express();
-
+//Middleware for parsing application/json
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+//Middleware to public 
 app.use(express.static('public'));
 
+app.get('/', (req, res) =>
+  res.sendFile(path.join(__dirname, './public/index.html'))
+);
 app.get('/notes', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
@@ -34,17 +36,18 @@ app.post('/api/notes', (req, res) => {
   console.info(`${req.method} request received to add a note`);
 
   // Destructuring assignment for the items in req.body
-  const { title, text } = req.body;
+  let { title, text ,id } = req.body;
 
-  if (title && text ) {
 
-    const newReview = {
+
+    let newReview = {
       title,
       text,
+      id: Math.random(),
     };
 
+    //appending new object to end of array
     reviewJson.push(newReview)
-    // Convert the data to a string so we can save it
     const reviewString = JSON.stringify(reviewJson);
 
     // Write the string to a file
@@ -55,8 +58,7 @@ app.post('/api/notes', (req, res) => {
             `Review for ${newReview} has been written to JSON file`
           )
     );
-  };
 });
 
-
+//listens for port call
 app.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}`));
