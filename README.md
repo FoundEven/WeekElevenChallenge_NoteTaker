@@ -6,4 +6,4 @@ I created this project to help me take notes and keep track of the notes. I buil
 
   ![Example of websitw](./photo.PNG)
 
-  Link to applictaion on Heroku()
+  Link to applictaion on Heroku(https://notetakerfoundeven-636667fb2b5c.herokuapp.com/)
